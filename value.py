@@ -147,6 +147,15 @@ class Value:
         out._backward = _backward
 
         return out
+    
+    def relu(self):
+        out = Value(0 if self < 0 else self.data, (self,), 'ReLU')
+
+        def _backward():
+            self.grad += (out > 0) * out.grad
+        out._backward = _backward
+
+        return out
 
     def __abs__(self):
         return -self if self.data < 0 else self
